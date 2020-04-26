@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.vet;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Arjen Poutsma
  */
 @XmlRootElement
+@EqualsAndHashCode
 public class Vets {
 
 	private List<Vet> vets;
