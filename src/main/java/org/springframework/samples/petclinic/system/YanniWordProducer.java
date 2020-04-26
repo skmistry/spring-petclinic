@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component("yanniWordProducer")
-@Profile("Yanni")
+@Profile({"default", "Yanni"})
 @Primary
 public class YanniWordProducer implements WordProducer {
     @Override

@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringJUnitConfig(value = YanniWordListenerComponentScanTest.class)
-@ComponentScan(basePackages = "org.springframework.samples.petclinic")
+@ComponentScan(basePackages = "org.springframework.samples.petclinic.system")
 public class YanniWordListenerComponentScanTest {
     @Autowired
     WordListener wordListener;
