@@ -6,7 +6,7 @@ import org.springframework.samples.petclinic.system.WordListener;
 import org.springframework.samples.petclinic.system.WordProducer;
 
 @Configuration
-interface ITestBaseConfig {
+interface IWordProducerConfig {
     @Bean
     default WordListener hearer(WordProducer wordProducer){
         return new WordListener(wordProducer);
