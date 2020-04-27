@@ -5,32 +5,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class VetControllerUnitTests {
+public class VetControllerMockMvcStandaloneUnitTests {
     @Mock
     VetRepository vetRepository;
 
     @InjectMocks
     VetController vetController;
 
-    @Mock
-    Map<String, Object> mockModel;
+    MockMvc mockMvc;
 
     Vets expectedVets;
 
     @BeforeEach
     void setUp() {
         initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(vetController).build();
 
         Vet saurabh = createVet(100, "Saurabh", "Mistry");
         Vet chaitra = createVet(101, "Chaitra", "Rao");
@@ -53,18 +53,19 @@ public class VetControllerUnitTests {
     }
 
     @Test
-    void testShowVetList() {
-        // when & then
-        assertThat(vetController.showVetList(mockModel)).isEqualTo("vets/vetList");
-
-        then(vetRepository).should().findAll();
-        then(mockModel).should().put(eq("vets"), any(Vets.class));
+    void testShowVetList() throws Exception {
+        mockMvc.perform(get("/vets.html"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("vets/vetList"))
+               .andExpect(model().attributeExists("vets"));
     }
 
     @Test
-    void testShowResourcesVetList() {
-        // when & then
-        assertThat(vetController.showResourcesVetList()).isEqualTo(expectedVets);
-        then(vetRepository).should().findAll();
+    void testShowResourcesVetList() throws Exception {
+        mockMvc.perform(get("/vets").accept(APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(APPLICATION_JSON))
+               .andExpect(jsonPath("$.vetList[0].id").value(100))
+               .andExpect(jsonPath("$.vetList[1].id").value(101));
     }
 }
